@@ -1,0 +1,6 @@
+contextily
+pyproj
+opencv-python
+numpy
+pandas
+matplotlib
