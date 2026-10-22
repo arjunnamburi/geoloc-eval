@@ -28,15 +28,18 @@ Built in Python with OpenCV, pyproj, contextily, NumPy, pandas and matplotlib (G
 
 ## Findings
 
-- **Inliers work as a yes/no confidence, not a precision dial.** Correct matches are accurate to a few metres regardless of inlier count; wrong ones are off by kilometres and almost always have fewer than ~10 inliers.
-- **Infrared is the main failure mode.** SIFT descriptors encode brightness gradients, so inverting brightness destroys matches: fully inverted photos got 0 inliers in every case (first version of the test set), and accuracy falls steadily as more of the scene is flipped.
-- **Altitude matters.** Photos simulating higher flight (fewer pixels for the same ground) give fewer keypoints and fail more often.
-- **The threshold is robust.** Score is nearly flat for T between ~2 and 8, so the exact choice is not a knife-edge.
-- **Brute-force search is too slow at scale.** ~2 s per photo for 49 tiles; a real 5 km search area has thousands of tiles, which is why real systems add a coarse retrieval step before fine matching.
+- **Inliers work as a yes/no confidence, not a precision dial.** If you look at the correct matches, you can clearly see that their inlier count is not really a factor. However for wrong matches, they are always off by a large distance and almost always have less than 10 inliers. Hence they basically act as a yes or no confidence.
+- **Infrared is the main failure mode.** SIFT descriptors use brightness gradients, so when we inverted brightness, it destroyed matches. Fully inverted photos got 0 inliers in every case, and if you look at the accuracy versus the inverting brightness, it fell more as more of the scene was flipped. 
+- **Altitude matters.** Results showed that the images with higher altitude gave fewer keypoints and failed more often.
+- **The threshold is robust.** Score is nearly flat for T between 2 and 8, so the exact choice is not a knife-edge, it is clearly robust.
+- **Brute-force search is too slow at scale.** 2 s per photo for 49 tiles. A real 5 km search area has thousands of tiles, which is why real systems add a coarse retrieval step before fine matching.
+
+- 
 
 ## Process note
 
-The first test set (fully inverted thermal, milder scale and blur) was too easy to evaluate a no-match rule on: every colour photo was correct and every thermal one had 0 inliers, so any threshold was perfect. I made the test set harder (graded thermal inversion, wider altitude and blur ranges) so the rule had real decisions to make.
+The first test set (fully inverted thermal, milder scale and blur) was too easy to evaluate a no-match rule on. Every colour photo was correct and every thermal one had 0 inliers, so any threshold was perfect. 
+I made the test set harder (graded thermal inversion, wider altitude and blur ranges) so the rule had real decisions to make and I could understand exactly how the threshold selection was done and how to analyze the plots.
 
 ## Limitations
 
@@ -51,3 +54,6 @@ Per-group thresholds (EO vs IR, altitude bands); a learned confidence (e.g. logi
 ## Running it
 
 Open `geoloc_eval.ipynb` in Google Colab and run all cells (~10 minutes; the localiser loop dominates). The map imagery is downloaded at runtime and is not included in this repository (Esri World Imagery is for viewing, not redistribution).
+
+## Note: AI Assistance
+The code was written with AI assistance. I ran, debugged and analyzed the experiments in this mini-project.
