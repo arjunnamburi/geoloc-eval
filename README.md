@@ -34,8 +34,6 @@ Built in Python with OpenCV, pyproj, contextily, NumPy, pandas and matplotlib (G
 - **The threshold is robust.** Score is nearly flat for T between 2 and 8, so the exact choice is not a knife-edge, it is clearly robust.
 - **Brute-force search is too slow at scale.** 2 s per photo for 49 tiles. A real 5 km search area has thousands of tiles, which is why real systems add a coarse retrieval step before fine matching.
 
-- 
-
 ## Process note
 
 The first test set (fully inverted thermal, milder scale and blur) was too easy to evaluate a no-match rule on. Every colour photo was correct and every thermal one had 0 inliers, so any threshold was perfect. 
